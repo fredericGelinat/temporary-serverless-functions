@@ -36,7 +36,7 @@ result.addEventListener('click',async function(e){
         const voteNode = result.querySelector(`.vote-${id}`)
        const votes = voteNode.dataset.votes;
        const newVote = await modifyData(id, votes)
-       title.textContent = 'survey'
+       title.textContent = 'Sondage'
 
         if(newVotes){
             
