@@ -35,13 +35,13 @@ result.addEventListener('click',async function(e){
         const id = btn.dataset.id
         const voteNode = result.querySelector(`.vote-${id}`)
        const votes = voteNode.dataset.votes;
-       const newVote = await modifyData(id, votes)
+       const newVotes = await modifyData(id, votes)
        title.textContent = 'Sondage'
 
         if(newVotes){
             
-                   voteNode.textContent = `${newVote} votes`
-                   voteNode.dataset.votes = newVote
+                   voteNode.textContent = `${newVotes} votes`
+                   voteNode.dataset.votes = newVotes
 
         }
     }
@@ -51,9 +51,11 @@ result.addEventListener('click',async function(e){
 async function modifyData(id, votes){
     title.textContent = 'Loading...'
     try {
-        const {data} = await axios.put(`/api/4-survey`, {id, votes})
+        const {data} = await axios.put(`/api/4-survey`, {id, votes});
+        const newVotes = data.fields.votes
+        return newVotes
     } catch (error) {
-        // console.log(error.response.data);
+        console.log(error.response.data);
         return null
     }
 } 

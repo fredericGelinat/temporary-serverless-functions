@@ -9,7 +9,7 @@ const airtable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
 exports.handler = async (event, context) => {
   const method = event.httpMethod;
 
-  if (method === "GET") {
+  if(method === "GET") {
     try {
       const { records } = await airtable.list();
       const survey = records.map((item) => {
@@ -29,7 +29,33 @@ exports.handler = async (event, context) => {
     }
   }
   if(method === 'PUT'){
-    
+    try {
+        const {id, votes} = JSON.parse(event.body);
+        if(!id || !votes){
+            return{
+                statusCode:400,
+                body:'Please provide id and votes values',
+            }
+        }
+        const fields ={votes:Number(votes)+1}
+        const item = await airtable.update( id, { fields})
+        console.log(item);
+        if(item.error){
+            return{
+                statusCode:400,
+                body:JSON.stringify(item)
+            }
+        }
+        return{
+            statusCode:200,
+            body:JSON.stringify(item)
+        }
+    } catch (error) {
+        return{
+            statusCode:400,
+            body: 'Please provide id and votes values'
+        }
+    }
   }
   //DEFAUT RESPONSE
   return{
